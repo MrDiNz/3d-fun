@@ -1,47 +1,71 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+    <div id="test"></div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ClassComponent.vue';
-import { Vue, Component } from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
+import * as THREE from 'three';
+
+const scene = new THREE.Scene();
+
 
 @Component({
-  components: { ExampleComponent }
+  components: {}
 })
 export default class PageIndex extends Vue {
-  todos: Todo[] = [
-    {
-      id: 1,
-      content: 'ct1'
-    },
-    {
-      id: 2,
-      content: 'ct2'
-    },
-    {
-      id: 3,
-      content: 'ct3'
-    },
-    {
-      id: 4,
-      content: 'ct4'
-    },
-    {
-      id: 5,
-      content: 'ct5'
+  mounted() {
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    let renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    (document.getElementById("test") as any).appendChild(renderer.domElement);
+
+
+    let geometry = new THREE.BoxGeometry();
+    let material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    let cube = new THREE.Mesh( geometry, material );
+    let cube2 = new THREE.Mesh( geometry, material );
+    let cube3 = new THREE.Mesh( geometry, material );
+    let cube4 = new THREE.Mesh( geometry, material );
+    scene.add( cube );
+    scene.add( cube2 );
+    scene.add( cube3 );
+    scene.add( cube4 );
+
+
+
+    camera.position.z = 10;
+    camera.position.x = 1
+    camera.position.y = -1
+    camera.rotateY(0.1)
+    camera.rotateX(0.1)
+let y = 0.01
+
+
+    function animate() {
+      requestAnimationFrame( animate );
+      renderer.render( scene, camera );
+y+=y
+      if(cube.position.y >1)
+      y = -0.01
+
+      else if (cube.position.y <0){
+        y = 0.01
+      }
+      cube.position.y = cube.position.y+y ;
+      cube2.position.y = cube.position.y+y+0.1 ;
+      cube3.position.y = cube.position.y+y+0.2 ;
+      cube4.position.y = cube.position.y+y+0.3 ;
+      console.log(cube.position.y )
+      // cube.rotation.y += 0.01;
+
     }
-  ];
-  meta: Meta = {
-    totalCount: 1200
-  };
+    animate();
+
+  }
+
 };
 </script>
